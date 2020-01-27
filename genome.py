@@ -59,12 +59,17 @@ class Genome:
         inNode = conn.inNode
         outNode = conn.outNode
 
+        # Disables old connection
         conn.setExpression(False)
 
+        # Creates new node at center of split
         newNode = NodeGene(HIDDEN, len(self.nodes))
+        # creates a new connection for inNode->newNode
         inToNew = ConnectionGene(inNode, newNode, 1, len(self.connections))
+        # creates a new connection for newNode->outNode
         newToOut = ConnectionGene(newNode, outNode, conn.weight, len(self.connections))
 
+        # Add new node and connections to genome
         self.addNode(newNode)
         self.addConnection(inToNew)
         self.addConnection(newToOut)
