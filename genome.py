@@ -76,15 +76,20 @@ class Genome:
         pass
 
 def crossover(parent1, parent2):
+    # Parent 1 is assumed to have the higher fitness
     child = Genome()
 
+    # Copies all nodes from the most fit parent
     for node in parent1.nodes.values():
         child.addNodeGene(node.copy())
 
+    # Begins cross pollinating connections between both parents
     for parent1Node in parent1.connections.values():
         if parent2.connections.get(parent1Node.innovationNumber) is not None: #Meaning they have matching genes
+            # When parents have matching genes, randomly select which connection to copy to child
             childConnGene = parent1Node.copy() if bool(getrandbits(1)) else parent2.connections.get(parent1Node.innovationNumber)
         else: #Non-matching genes
+            #Defaults to more fit parent when genes dont match on one connection
             childConnGene = parent1Node.copy()
 
         child.addConnectionGene(childConnGene)
