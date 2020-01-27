@@ -1,4 +1,4 @@
-from random import randint, random, getrandbits
+from random import random, getrandbits, choice
 from connectionGene import ConnectionGene
 from constants import INPUT, HIDDEN, OUTPUT
 
@@ -21,8 +21,8 @@ class Genome:
 
     def addConnectionMutation(self):
         # Get two random nodes within the genome
-        node_1 = self.nodes[randint(0, len(self.nodes))]
-        node_2 = self.nodes[randint(0, len(self.nodes))]
+        node_1 = choice(list(self.nodes.values()))
+        node_2 = choice(list(self.nodes.values()))
         # Random weight between -1 and 1
         weight = ((random() * 2) - 1)
         reversed = False
@@ -53,7 +53,8 @@ class Genome:
         pass
 
     def addNodeMutation(self):
-        conn = self.connections[randint(0, len(self.connections))]
+        # Selects random connection
+        conn = choice(list(self.connections.values()))
 
         inNode = conn.inNode
         outNode = conn.outNode
