@@ -13,6 +13,6 @@ class ConnectionGene:
 
     def copy(self):
         return ConnectionGene(self.inNode,
-                              self.OutNode, 
+                              self.outNode, 
                               self.weight,
                               self.innovationNumber)
