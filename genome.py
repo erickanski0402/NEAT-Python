@@ -3,10 +3,11 @@ from connectionGene import ConnectionGene
 from constants import INPUT, HIDDEN, OUTPUT
 
 class Genome:
-    def __init__(self):
+    def __init__(self, innovationTracker):
         # Initializes genomes with empty dictionaries for connections/nodes
         self.connections = {}
         self.nodes = {}
+        self.innovationTracker = innovationTracker
         pass
 
     def addConnectionGene(self, newConnection):
@@ -44,10 +45,11 @@ class Genome:
                 # Otherwise continue
                 continue
 
+        connString = f'{node_1.id}->{node_2.id}' if not reversed else f'{node_2.id}->{node_1.id}'
         newConnection = ConnectionGene(node_1 if not reversed else node_2,
                                        node_2 if not reversed else node_1,
                                        weight,
-                                       len(self.connections))
+                                       self.innovationTracker.resolveInnovationNumber(connString))
         # Add new unique connection to genome
         self.addConnection(newConnection)
         pass
@@ -65,9 +67,9 @@ class Genome:
         # Creates new node at center of split
         newNode = NodeGene(HIDDEN, len(self.nodes))
         # creates a new connection for inNode->newNode
-        inToNew = ConnectionGene(inNode, newNode, 1, len(self.connections))
+        inToNew = ConnectionGene(inNode, newNode, 1, self.innovationTracker.resolveInnovationNumber(f'{inNode.id}->{newNode.id}'))
         # creates a new connection for newNode->outNode
-        newToOut = ConnectionGene(newNode, outNode, conn.weight, len(self.connections))
+        newToOut = ConnectionGene(newNode, outNode, conn.weight, self.innovationTracker.resolveInnovationNumber(f'{newNode.id}->{outNode.id}'))
 
         # Add new node and connections to genome
         self.addNode(newNode)
@@ -75,25 +77,25 @@ class Genome:
         self.addConnection(newToOut)
         pass
 
-def crossover(parent1, parent2):
-    # Parent 1 is assumed to have the higher fitness
-    child = Genome()
+    def crossover(parent1, parent2):
+        # Parent 1 is assumed to have the higher fitness
+        child = Genome()
 
-    # Copies all nodes from the most fit parent
-    for node in parent1.nodes.values():
-        child.addNodeGene(node.copy())
+        # Copies all nodes from the most fit parent
+        for node in parent1.nodes.values():
+            child.addNodeGene(node.copy())
 
-    # Begins cross pollinating connections between both parents
-    for parent1Node in parent1.connections.values():
-        if parent2.connections.get(parent1Node.innovationNumber) is not None: #Meaning they have matching genes
-            # When parents have matching genes, randomly select which connection to copy to child
-            childConnGene = parent1Node.copy() if bool(getrandbits(1)) else parent2.connections.get(parent1Node.innovationNumber)
-        else: #Non-matching genes
-            #Defaults to more fit parent when genes dont match on one connection
-            childConnGene = parent1Node.copy()
+        # Begins cross pollinating connections between both parents
+        for parent1Node in parent1.connections.values():
+            if parent2.connections.get(parent1Node.innovationNumber) is not None: #Meaning they have matching genes
+                # When parents have matching genes, randomly select which connection to copy to child
+                childConnGene = parent1Node.copy() if bool(getrandbits(1)) else parent2.connections.get(parent1Node.innovationNumber)
+            else: #Non-matching genes
+                #Defaults to more fit parent when genes dont match on one connection
+                childConnGene = parent1Node.copy()
 
-        child.addConnectionGene(childConnGene)
-        continue
-    return child
+            child.addConnectionGene(childConnGene)
+            continue
+        return child
 
 # Write tests to verify functionality is good so far. Refer to example in paper provided
