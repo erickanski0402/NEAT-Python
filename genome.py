@@ -49,7 +49,7 @@ class Genome:
         newConnection = ConnectionGene(node_1 if not reversed else node_2,
                                        node_2 if not reversed else node_1,
                                        weight,
-                                       self.innovationTracker.resolveInnovationNumber(connString))
+                                       self.innovationTracker.resolveConnInnovationNumber(connString))
         # Add new unique connection to genome
         self.addConnection(newConnection)
         pass
@@ -67,9 +67,9 @@ class Genome:
         # Creates new node at center of split
         newNode = NodeGene(HIDDEN, len(self.nodes))
         # creates a new connection for inNode->newNode
-        inToNew = ConnectionGene(inNode, newNode, 1, self.innovationTracker.resolveInnovationNumber(f'{inNode.id}->{newNode.id}'))
+        inToNew = ConnectionGene(inNode, newNode, 1, self.innovationTracker.resolveConnInnovationNumber(f'{inNode.id}->{newNode.id}'))
         # creates a new connection for newNode->outNode
-        newToOut = ConnectionGene(newNode, outNode, conn.weight, self.innovationTracker.resolveInnovationNumber(f'{newNode.id}->{outNode.id}'))
+        newToOut = ConnectionGene(newNode, outNode, conn.weight, self.innovationTracker.resolveConnInnovationNumber(f'{newNode.id}->{outNode.id}'))
 
         # Add new node and connections to genome
         self.addNode(newNode)
@@ -87,11 +87,11 @@ class Genome:
 
         # Begins cross pollinating connections between both parents
         for parent1Node in parent1.connections.values():
-            if parent2.connections.get(parent1Node.innovationNumber) is not None: #Meaning they have matching genes
-                # When parents have matching genes, randomly select which connection to copy to child
+            if parent2.connections.get(parent1Node.innovationNumber) is not None: # Meaning they have matching genes
+                # When parents have matching connection genes, randomly select which connection to copy to child
                 childConnGene = parent1Node.copy() if bool(getrandbits(1)) else parent2.connections.get(parent1Node.innovationNumber)
-            else: #Non-matching genes
-                #Defaults to more fit parent when genes dont match on one connection
+            else: # Non-matching genes
+                # Defaults to more fit parent when connection genes dont match
                 childConnGene = parent1Node.copy()
 
             child.addConnectionGene(childConnGene)
