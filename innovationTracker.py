@@ -18,4 +18,6 @@ class InnovationTracker:
         return self.connInnovations.get(connString)
 
     def resolveNodeInnovationNumber(self, type):
-        pass
+        nextNodeId = self.nextNodeInnvationNumber
+        self.nextNodeInnvationNumber += 1
+        return nextNodeId

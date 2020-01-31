@@ -65,7 +65,7 @@ class Genome:
         conn.setExpression(False)
 
         # Creates new node at center of split
-        newNode = NodeGene(HIDDEN, len(self.nodes))
+        newNode = NodeGene(HIDDEN, self.innovationTracker.resolveNodeInnovationNumber())
         # creates a new connection for inNode->newNode
         inToNew = ConnectionGene(inNode, newNode, 1, self.innovationTracker.resolveConnInnovationNumber(f'{inNode.id}->{newNode.id}'))
         # creates a new connection for newNode->outNode
