@@ -12,12 +12,13 @@ class InnovationTracker:
 
     # Format of connString: 'inNode id->outNode id'
     def resolveConnInnovationNumber(self, connString):
-        if connInnovations.get(connString) is None:
+        if self.connInnovations.get(connString) is None:
             self.addConnInnovation(connString)
 
         return self.connInnovations.get(connString)
 
-    def resolveNodeInnovationNumber(self, type):
+    def resolveNodeInnovationNumber(self):
+        # Is this sufficient node tracking?
         nextNodeId = self.nextNodeInnvationNumber
         self.nextNodeInnvationNumber += 1
         return nextNodeId
