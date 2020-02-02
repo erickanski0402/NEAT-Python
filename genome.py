@@ -1,5 +1,6 @@
 from random import random, getrandbits, choice
 from connectionGene import ConnectionGene
+from nodeGene import NodeGene
 from constants import INPUT, HIDDEN, OUTPUT
 
 class Genome:
@@ -51,7 +52,7 @@ class Genome:
                                        weight,
                                        self.innovationTracker.resolveConnInnovationNumber(connString))
         # Add new unique connection to genome
-        self.addConnection(newConnection)
+        self.addConnectionGene(newConnection)
         pass
 
     def addNodeMutation(self):
@@ -72,14 +73,14 @@ class Genome:
         newToOut = ConnectionGene(newNode, outNode, conn.weight, self.innovationTracker.resolveConnInnovationNumber(f'{newNode.id}->{outNode.id}'))
 
         # Add new node and connections to genome
-        self.addNode(newNode)
-        self.addConnection(inToNew)
-        self.addConnection(newToOut)
+        self.addNodeGene(newNode)
+        self.addConnectionGene(inToNew)
+        self.addConnectionGene(newToOut)
         pass
 
     def crossover(parent1, parent2):
         # Parent 1 is assumed to have the higher fitness
-        child = Genome()
+        child = Genome(parent1.innovationTracker)
 
         # Copies all nodes from the most fit parent
         for node in parent1.nodes.values():

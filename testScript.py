@@ -7,6 +7,7 @@ from helpers import printGenome
 from random import random
 
 def testCrossover():
+    print('\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>TEST CROSSOVER<<<<<<<<<<<<<<<<<<<<<<<<<')
     # Global innovation number tracking object
     inTracker = InnovationTracker()
     parent1 = Genome(inTracker)
@@ -52,4 +53,40 @@ def testCrossover():
     printGenome('Child', Genome.crossover(parent2, parent1))
     pass
 
+def testAddConnectionMutation():
+    print('\n>>>>>>>>>>>>>>>>>>>TEST ADD CONNECTION MUTATION<<<<<<<<<<<<<<<<<<<<')
+    inTracker = InnovationTracker()
+    gen = Genome(inTracker)
+
+    node1 = NodeGene(INPUT, gen.innovationTracker.resolveNodeInnovationNumber())
+    node2 = NodeGene(OUTPUT, gen.innovationTracker.resolveNodeInnovationNumber())
+
+    gen.addNodeGene(node1)
+    gen.addNodeGene(node2)
+
+    printGenome('Gen Before', gen)
+    gen.addConnectionMutation()
+    printGenome('Gen After', gen)
+    pass
+
+def testAddNodeMutation():
+    print('\n>>>>>>>>>>>>>>>>>>>>>>TEST ADD NODE MUTATION<<<<<<<<<<<<<<<<<<<<<<')
+    inTracker = InnovationTracker()
+    gen = Genome(inTracker)
+
+    node1 = NodeGene(INPUT, gen.innovationTracker.resolveNodeInnovationNumber())
+    node2 = NodeGene(OUTPUT, gen.innovationTracker.resolveNodeInnovationNumber())
+
+    gen.addNodeGene(node1)
+    gen.addNodeGene(node2)
+
+    gen.addConnectionMutation()
+    printGenome('Gen Before', gen)
+
+    gen.addNodeMutation()
+    printGenome('Gen After', gen)
+    pass
+
 testCrossover()
+testAddConnectionMutation()
+testAddNodeMutation()
