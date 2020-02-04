@@ -1,7 +1,8 @@
 from random import random, getrandbits, choice
 from connectionGene import ConnectionGene
 from nodeGene import NodeGene
-from constants import INPUT, HIDDEN, OUTPUT
+from constants import INPUT, HIDDEN, OUTPUT, WEIGHT_MUTATION_THRESHOLD
+from helpers import generateNewWeight
 
 class Genome:
     def __init__(self, innovationTracker):
@@ -21,12 +22,20 @@ class Genome:
         self.nodes[newNode.id] = newNode
         pass
 
+    def mutateWeights(self):
+        for conn in self.connections:
+            if random() < WEIGHT_MUTATION_THRESHOLD:
+                conn.setWeight(generateNewWeight())
+            else:
+                conn.setWeight(conn.weight * 4 - 2)
+        pass
+
     def addConnectionMutation(self):
         # Get two random nodes within the genome
         node_1 = choice(list(self.nodes.values()))
         node_2 = choice(list(self.nodes.values()))
         # Random weight between -1 and 1
-        weight = ((random() * 2) - 1)
+        weight = generateNewWeight()
         reversed = False
 
         # Does the second node come before the first?

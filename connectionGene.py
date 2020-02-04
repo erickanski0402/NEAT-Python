@@ -11,8 +11,12 @@ class ConnectionGene:
         self.expressed = flag
         pass
 
+    def setWeight(self, weight):
+        self.weight = weight
+        pass
+
     def copy(self):
         return ConnectionGene(self.inNode,
-                              self.outNode, 
+                              self.outNode,
                               self.weight,
                               self.innovationNumber)

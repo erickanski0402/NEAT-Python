@@ -87,6 +87,9 @@ def testAddNodeMutation():
     printGenome('Gen After', gen)
     pass
 
+def testMutateWeights:
+    pass
+
 testCrossover()
 testAddConnectionMutation()
 testAddNodeMutation()

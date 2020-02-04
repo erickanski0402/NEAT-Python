@@ -1,3 +1,5 @@
+from random import random
+
 def printConnections(connections):
     for conn in connections.values():
         printConnection(conn)
@@ -22,3 +24,6 @@ def printGenome(name, genome):
     printConnections(genome.connections)
     print('--------------------------------------------------------------')
     pass
+
+def generateNewWeight():
+    return random() * 2 - 1
