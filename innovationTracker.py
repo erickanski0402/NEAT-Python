@@ -10,7 +10,7 @@ class InnovationTracker:
         self.nextConnInnovationNumber += 1
         pass
 
-    # Format of connString: 'inNode id->outNode id'
+    # Format of connString: '<inNode id>-><outNode id>'
     def resolveConnInnovationNumber(self, connString):
         if self.connInnovations.get(connString) is None:
             self.addConnInnovation(connString)
@@ -22,3 +22,7 @@ class InnovationTracker:
         nextNodeId = self.nextNodeInnvationNumber
         self.nextNodeInnvationNumber += 1
         return nextNodeId
+
+    # Format of connString: '<inNode id>-><outNode id>'
+    def doesConnectionExist(self, connString):
+        return True if self.connInnovations.get(connString) is not None else False

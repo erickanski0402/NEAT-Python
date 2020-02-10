@@ -23,10 +23,13 @@ class Genome:
         pass
 
     def mutateWeights(self):
-        for conn in self.connections:
+        # Selects a random connection from the genomes list of connectionGenes
+        for conn in self.connections.values():
             if random() < WEIGHT_MUTATION_THRESHOLD:
+                # 9 out of 10 times the connection is set with a new weight
                 conn.setWeight(generateNewWeight())
             else:
+                # 1 out of 10 times the connection weight is multiplied by a factor between -1 and 1
                 conn.setWeight(conn.weight * 4 - 2)
         pass
 
@@ -45,17 +48,16 @@ class Genome:
             # Ensures all connections are feed-forward
             reversed = True
 
-        # Does this connection exist already?
-        for conn in self.connections:
-            if ((conn.inNode is node_1.id and conn.outNode is node_2.id)
-            or (conn.inNode is node_2.id and conn.outNode is node_1.id)):
-                # if yes, return out silently
-                return
-            else:
-                # Otherwise continue
-                continue
-
+        # connString format <Input node id>-><Output node id>
         connString = f'{node_1.id}->{node_2.id}' if not reversed else f'{node_2.id}->{node_1.id}'
+
+        # Does this connection exist already?
+        if ((self.innovationTracker.doesConnectionExist(connString))
+        # Or is the node recurrent? (unclear if this is an issue)
+        or (node_1.id is node_2.id)):
+            # if so, return silently
+            return
+
         newConnection = ConnectionGene(node_1 if not reversed else node_2,
                                        node_2 if not reversed else node_1,
                                        weight,

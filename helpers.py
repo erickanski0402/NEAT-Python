@@ -11,7 +11,10 @@ def printNodes(nodes):
     pass
 
 def printConnection(connection):
-    print(f'INNOVATION: {connection.innovationNumber}, {connection.inNode.id} -> {connection.outNode.id}, EXPRESSED: {connection.expressed}, WEIGHT: {connection.weight}')
+    print(f'INNOVATION: {connection.innovationNumber}, ' +
+    f'{connection.inNode.id}->{connection.outNode.id}, ' +
+    f'EXPRESSED: {connection.expressed}, ' +
+    f'WEIGHT: {connection.weight}')
     pass
 
 def printNode(node):
@@ -22,7 +25,7 @@ def printGenome(name, genome):
     print(f'--------------------------{name}----------------------------')
     printNodes(genome.nodes)
     printConnections(genome.connections)
-    print('--------------------------------------------------------------')
+    print('--------------------------------------------------------------------')
     pass
 
 def generateNewWeight():

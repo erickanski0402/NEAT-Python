@@ -6,7 +6,7 @@ from constants import INPUT, HIDDEN, OUTPUT
 from helpers import printGenome
 from random import random
 
-def testCrossover():
+def testCrossover_aNewGenomeIsCreatedFromGenesFromBothParents():
     print('\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>TEST CROSSOVER<<<<<<<<<<<<<<<<<<<<<<<<<')
     # Global innovation number tracking object
     inTracker = InnovationTracker()
@@ -53,7 +53,7 @@ def testCrossover():
     printGenome('Child', Genome.crossover(parent2, parent1))
     pass
 
-def testAddConnectionMutation():
+def testAddConnectionMutation_aNewConnectionGeneIsCreatedFromExistingNodeGenes():
     print('\n>>>>>>>>>>>>>>>>>>>TEST ADD CONNECTION MUTATION<<<<<<<<<<<<<<<<<<<<')
     inTracker = InnovationTracker()
     gen = Genome(inTracker)
@@ -69,7 +69,28 @@ def testAddConnectionMutation():
     printGenome('Gen After', gen)
     pass
 
-def testAddNodeMutation():
+def testAddConnectionMutation_silentlyReturnsOutOfMethodWhenDuplicateConnectionGenesSelected():
+    print('\n>>>>>>>>>>>TEST ADD CONNECTION MUTATION, NO DUPLICATES<<<<<<<<<<<<')
+    inTracker = InnovationTracker()
+    gen = Genome(inTracker)
+
+    node1 = NodeGene(INPUT, gen.innovationTracker.resolveNodeInnovationNumber())
+    node2 = NodeGene(OUTPUT, gen.innovationTracker.resolveNodeInnovationNumber())
+
+    gen.addNodeGene(node1)
+    gen.addNodeGene(node2)
+
+    conn = ConnectionGene(gen.nodes[1], gen.nodes[2], 1, gen.innovationTracker
+        .resolveConnInnovationNumber(f'{node1.id}->{node2.id}'))
+    gen.addConnectionGene(conn)
+
+    printGenome('Gen Before', gen)
+    gen.addConnectionMutation()
+    printGenome('Gen After', gen)
+
+    pass
+
+def testAddNodeMutation_aNewNodeGeneIsCreatedFromExistingConnectionGeneSplit():
     print('\n>>>>>>>>>>>>>>>>>>>>>>TEST ADD NODE MUTATION<<<<<<<<<<<<<<<<<<<<<<')
     inTracker = InnovationTracker()
     gen = Genome(inTracker)
@@ -80,16 +101,38 @@ def testAddNodeMutation():
     gen.addNodeGene(node1)
     gen.addNodeGene(node2)
 
-    gen.addConnectionMutation()
-    printGenome('Gen Before', gen)
+    conn = ConnectionGene(gen.nodes[1], gen.nodes[2], 2, gen.innovationTracker
+        .resolveConnInnovationNumber(f'{node1.id}->{node2.id}'))
+    gen.addConnectionGene(conn)
 
+    printGenome('Gen Before', gen)
     gen.addNodeMutation()
     printGenome('Gen After', gen)
     pass
 
-def testMutateWeights:
+def testMutateWeights_connectionWeightIsEitherMutatedOrReplaced():
+    print('\n>>>>>>>>>>>>>>>>>>>>>>>TEST WEIGHT MUTATION<<<<<<<<<<<<<<<<<<<<<<<')
+    inTracker = InnovationTracker()
+    gen = Genome(inTracker)
+
+    node1 = NodeGene(INPUT, gen.innovationTracker.resolveNodeInnovationNumber())
+    node2 = NodeGene(OUTPUT, gen.innovationTracker.resolveNodeInnovationNumber())
+
+    gen.addNodeGene(node1)
+    gen.addNodeGene(node2)
+
+    conn = ConnectionGene(gen.nodes[1], gen.nodes[2], 1, gen.innovationTracker
+        .resolveConnInnovationNumber(f'{node1.id}->{node2.id}'))
+
+    gen.addConnectionGene(conn)
+    printGenome('Gen Before', gen)
+
+    gen.mutateWeights()
+    printGenome('Gen After', gen)
     pass
 
-testCrossover()
-testAddConnectionMutation()
-testAddNodeMutation()
+testCrossover_aNewGenomeIsCreatedFromGenesFromBothParents()
+testAddConnectionMutation_aNewConnectionGeneIsCreatedFromExistingNodeGenes()
+testAddConnectionMutation_silentlyReturnsOutOfMethodWhenDuplicateConnectionGenesSelected()
+testAddNodeMutation_aNewNodeGeneIsCreatedFromExistingConnectionGeneSplit()
+testMutateWeights_connectionWeightIsEitherMutatedOrReplaced()
